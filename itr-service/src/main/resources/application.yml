@@ -1,0 +1,37 @@
+
+server:
+  port: 8081
+  address: 0.0.0.0
+
+spring:
+  application:
+    name: itr-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/taxfiling_itr
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+spring:
+  kafka:
+    bootstrap-servers: 0.0.0.0:9092
+    consumer:
+      group-id: itr-service-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
